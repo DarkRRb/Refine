@@ -1,0 +1,35 @@
+{
+    "name": "Refine",
+    "image": "mcr.microsoft.com/devcontainers/base:alpine",
+    "mounts": [
+        "type=bind,source=${localEnv:HOME}/.ssh,target=/root/.ssh"
+    ],
+    "features": {
+        "ghcr.io/DarkRRb/features/mirror-alpine-apk:1": {
+            "host": "mirrors.ustc.edu.cn"
+        },
+        "ghcr.io/DarkRRb/features/dotnet-sdk:1": {
+            "version": "10.0"
+        }
+    },
+    "overrideFeatureInstallOrder": [
+        "ghcr.io/DarkRRb/features/mirror-alpine-apk"
+    ],
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "ms-dotnettools.csdevkit"
+            ],
+            "settings": {
+                "terminal.integrated.defaultProfile.linux": "zsh",
+                "editor.acceptSuggestionOnCommitCharacter": false,
+                "editor.rulers": [
+                    120
+                ]
+            }
+        }
+    },
+    "remoteUser": "root",
+    "workspaceFolder": "/root/Refine",
+    "workspaceMount": "type=bind,source=${localWorkspaceFolder},target=${containerWorkspaceFolder}"
+}

@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="Refine.Test/Refine.Test.csproj" />
+  <Project Path="Refine/Refine.csproj" />
+</Solution>
