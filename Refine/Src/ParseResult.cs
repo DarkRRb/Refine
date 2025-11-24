@@ -27,16 +27,30 @@ public class ParseResult {
     }
 
     public bool TryGet<T>(Option<T> option, [NotNullWhen(true)] out T? value) {
-        bool result = _options.TryGetValue(option, out object? value_);
-        value = (T?)value_;
-        return result;
+        if (_options.TryGetValue(option, out object? value_) &&
+            value_ is T tvalue) {
+            value = tvalue;
+            return true;
+        }
+        value = default;
+        return false;
+        //bool result = _options.TryGetValue(option, out object? value_);
+        //value = (T?)value_;
+        //return result;
     }
 
     public bool TryGet<T>(Flag flag) => _flags.Contains(flag);
 
     public bool TryGet<T>(Argument<T> argument, [NotNullWhen(true)] out T? value) {
-        bool result = _arguments.TryGetValue(argument, out object? value_);
-        value = (T?)value_;
-        return result;
+        if (_arguments.TryGetValue(argument, out object? value_) &&
+            value_ is T tvalue) {
+            value = tvalue;
+            return true;
+        }
+        value = default;
+        return false;
+        //bool result = _arguments.TryGetValue(argument, out object? value_);
+        //value = (T?)value_;
+        //return result;
     }
 }

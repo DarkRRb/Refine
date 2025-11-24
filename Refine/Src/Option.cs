@@ -6,7 +6,7 @@ public class Option<T>(string @long, char @short, Func<ReadOnlySpan<char>, T> co
     public string Long { get; } = @long;
     public char Short { get; } = @short;
 
-    public Type TargetType { get; } = typeof(T);
+    public Type TargetType => typeof(T);
 
     private readonly Func<ReadOnlySpan<char>, T> _converter = converter;
 

@@ -27,7 +27,7 @@ public class Command(string @long, char @short) : INamed {
 
     public Command Add(Command command) {
         _commands.Add(command.Long, command);
-        if (command.Short == '\0') {
+        if (command.Short != '\0') {
             _shortCommands.Add(command.Short, command);
         }
 
@@ -35,7 +35,7 @@ public class Command(string @long, char @short) : INamed {
     }
     public Command Add<T>(Option<T> option) {
         _options.Add(option.Long, option);
-        if (option.Short == '\0') {
+        if (option.Short != '\0') {
             _shortOptions.Add(option.Short, option);
         }
 
@@ -44,7 +44,7 @@ public class Command(string @long, char @short) : INamed {
 
     public Command Add(Flag flag) {
         _flags.Add(flag.Long, flag);
-        if (flag.Short == '\0') {
+        if (flag.Short != '\0') {
             _shortFlags.Add(flag.Short, flag);
         }
 
