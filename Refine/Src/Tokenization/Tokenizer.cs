@@ -23,6 +23,7 @@ public ref struct Tokenizer(ReadOnlySpan<string> args)  /* Duck Typing: IEnumera
             if (_subIndex + 1 < current.Length && current[_subIndex + 1] == '=') { // short options
                 Current = new Token(
                     TokenType.ShortOption,
+                    current,
                     current.AsSpan(_subIndex, 1),
                     current.AsSpan((_subIndex + 2)..)
                 );
@@ -32,7 +33,7 @@ public ref struct Tokenizer(ReadOnlySpan<string> args)  /* Duck Typing: IEnumera
                 return true;
             }
 
-            Current = new Token(TokenType.ShortKey, current.AsSpan(_subIndex, 1));
+            Current = new Token(TokenType.ShortKey, current, current.AsSpan(_subIndex, 1));
 
             if (_subIndex + 1 >= current.Length) {
                 _subIndex = 0;
@@ -44,7 +45,7 @@ public ref struct Tokenizer(ReadOnlySpan<string> args)  /* Duck Typing: IEnumera
         }
 
         if (_eoo) {
-            Current = new Token(TokenType.Argument, current);
+            Current = new Token(TokenType.Argument, current, current);
             _index += 1;
             return true;
         }
@@ -58,14 +59,19 @@ public ref struct Tokenizer(ReadOnlySpan<string> args)  /* Duck Typing: IEnumera
         if (current.StartsWith("--")) {
             int equalsIndex = current.IndexOf('=', 2);
             Current = equalsIndex != -1
-                ? new Token(TokenType.Option, current.AsSpan(2, equalsIndex - 2), current.AsSpan(equalsIndex + 1))
-                : new Token(TokenType.Key, current.AsSpan(2));
+                ? new Token(
+                    TokenType.Option,
+                    current,
+                    current.AsSpan(2, equalsIndex - 2),
+                    current.AsSpan(equalsIndex + 1)
+                )
+                : new Token(TokenType.Key, current, current.AsSpan(2));
             _index += 1;
             return true;
         }
 
         if (current == "-") {
-            Current = new Token(TokenType.Argument, current);
+            Current = new Token(TokenType.Argument, current, current);
             _index++;
             return true;
         }
@@ -75,7 +81,7 @@ public ref struct Tokenizer(ReadOnlySpan<string> args)  /* Duck Typing: IEnumera
             goto Start;
         }
 
-        Current = new Token(TokenType.Argument, current);
+        Current = new Token(TokenType.Argument, current, current);
         _index++;
         return true;
     }
