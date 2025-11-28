@@ -39,7 +39,7 @@ public class ParseResult {
         //return result;
     }
 
-    public bool TryGet<T>(Flag flag) => _flags.Contains(flag);
+    public bool TryGet(Flag flag) => _flags.Contains(flag);
 
     public bool TryGet<T>(Argument<T> argument, [NotNullWhen(true)] out T? value) {
         if (_arguments.TryGetValue(argument, out object? value_) &&

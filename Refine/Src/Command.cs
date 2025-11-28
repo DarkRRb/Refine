@@ -74,13 +74,15 @@ public class Command(string @long, char @short) : INamed {
                     throw new ConvertException(wvo, token.Value.ToString(), e);
                 }
 
+                wvo = null;
+
                 continue;
             }
 
             switch (token.Type) {
                 case TokenType.Argument: {
                     if (commands.TryGetValue(token.Value, out Command? command)
-                     || _shortCommands.TryGetValue(token.Value[0], out command)) {
+                     || (token.Value.Length == 1 && _shortCommands.TryGetValue(token.Value[0], out command))) {
                         result.Add(command, command.Parse(tokenizer));
                         return result;
                     }
@@ -113,6 +115,7 @@ public class Command(string @long, char @short) : INamed {
                         try { result.Add(option, option.Convert(token.Value)); } catch (Exception e) {
                             throw new ConvertException(option, token.Value.ToString(), e);
                         }
+                        continue;
                     }
 
                     throw new UnknownOptionException(token.Origin);
@@ -135,6 +138,7 @@ public class Command(string @long, char @short) : INamed {
                         try { result.Add(option, option.Convert(token.Value)); } catch (Exception e) {
                             throw new ConvertException(option, token.Value.ToString(), e);
                         }
+                        continue;
                     }
 
                     throw new UnknownOptionException(token.Origin);

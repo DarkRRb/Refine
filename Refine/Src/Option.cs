@@ -12,5 +12,5 @@ public class Option<T>(string @long, char @short, Func<ReadOnlySpan<char>, T> co
 
     public object? Convert(ReadOnlySpan<char> value) => _converter(value);
 
-    public override string ToString() => $"--{Long}/-{Short}";
+    public override string ToString() => $"--{Long}{(Short == '\0' ? "" : $"/-{Short}")}";
 }
