@@ -146,6 +146,8 @@ public class Command(string @long, char @short) : INamed {
             }
         }
 
+        if (wvo != null) throw new MissingValueException(wvo);
+
         return result;
     }
 }
