@@ -8,7 +8,7 @@ using Xunit;
 
 namespace Umrab.Options.Test;
 
-public class CommandParseTests {
+public class CommandTests {
     private static Command BuildRoot() => new Command("app")
             // Counting flag: -v / -vv / -v -vv
             .Option<int>("verbose", ['v'], isFlag: true, (span, latest) => latest + 1)
@@ -109,5 +109,24 @@ public class CommandParseTests {
     public void MissingValueNextIsOption() {
         Command root = BuildRoot();
         Assert.Throws<MissingValueException>(() => root.Parse(["--name", "--unknown"]));
+    }
+
+    [Fact]
+    public void X() {
+        ParseResult result = new Command("MiHoYoDownloader")
+            .Option<bool>("help", ['h'], isFlag: true, (_, _) => true)
+            .SubCommand("games", ['g'], c => c
+                .Option<bool>("help", ['h'], isFlag: true, (_, _) => true)
+                .Option<string>("region", ['r'], (v, _) => v.ToString())
+                .Option<string>("language", ['l'], (v, _) => v.ToString()))
+            .SubCommand("download", ['d'], c => c
+                .Option<bool>("help", ['h'], isFlag: true, (_, _) => true)
+                .Option<string>("region", ['r'], (v, _) => v.ToString())
+                .Option<string>("game-id", ['g'], (v, _) => v.ToString())
+                .Option<bool>("predownload", ['p'], isFlag: true, (_, _) => true)
+                .Option<string>("language", ['l'], (v, _) => v.ToString())
+                .Option<string>("source", ['s'], (v, _) => v.ToString())
+                .Option<string>("target", ['t'], (v, _) => v.ToString()))
+            .Parse(["g", "-h"]);
     }
 }

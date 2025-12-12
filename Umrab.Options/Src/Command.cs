@@ -152,9 +152,16 @@ public class Command(string name = "") {
                     continue;
                 }
                 case TokenType.Argument: {
-                    if (!tokenizer.EndOfOption && result.SubCommand == null && (_commands.TryGetValue(token.Origin, out Command? command) || _aliasCommands.TryGetValue(token.Origin[0], out command))) {
-                        result.SetSubCommand(command.Parse(tokenizer));
-                        return result;
+                    if (!tokenizer.EndOfOption && result.SubCommand == null) {
+                        if (_commands.TryGetValue(token.Origin, out Command? command)) {
+                            result.SetSubCommand(command.Parse(tokenizer));
+                            return result;
+                        }
+
+                        if (token.Origin.Length == 1 && _aliasCommands.TryGetValue(token.Origin[0], out command)) {
+                            result.SetSubCommand(command.Parse(tokenizer));
+                            return result;
+                        }
                     }
 
                     if (argumentIndex >= _arguments.Count) throw new UnexpectedTokenException(token);
